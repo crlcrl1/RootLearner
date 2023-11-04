@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/root">
-        <file>res/res_letter.json</file>
-        <file>res/res_page.json</file>
-    </qresource>
-    <qresource prefix="/icon"/>
-</RCC>
