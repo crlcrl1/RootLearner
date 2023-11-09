@@ -787,7 +787,8 @@
             "meaning": "to teach",
             "examples": {
                 "doctor": "n. 医生，博士",
-                "doctrine": "n. 教条，教义"
+                "doctrine": "n. 教条，教义",
+                "document": "n. 文件"
             }
         },
         "ed": {
@@ -840,15 +841,15 @@
             "meaning": "to make",
             "examples": {
                 "fabricate": "v. 制作，捏造",
-                "prefabricated": "a. 预制的",
-                "facetious": "a. 轻浮的",
-                "preface": "n. 前言，序言"
+                "prefabricated": "a. 预制的"
             }
         },
         "fac, fic": {
             "meaning": "face",
             "examples": {
-                "face": "n. 脸"
+                "face": "n. 脸",
+                "facetious": "a. 轻浮的",
+                "preface": "n. 前言，序言"
             }
         },
         "dur": {
@@ -862,8 +863,7 @@
             "meaning": "power",
             "examples": {
                 "dynasty": "n. 王朝",
-                "dynamics": "n. 动力学",
-                "document": "n. 文件"
+                "dynamics": "n. 动力学"
             }
         },
         "erg, ert": {
@@ -1468,7 +1468,7 @@
         "laps": {
             "meaning": "to slip",
             "examples": {
-                "lapse": "v. 慢慢沉下，掉下n. 失误",
+                "lapse": "v. 慢慢沉下，掉下 n. 失误",
                 "elapse": "v. 时光流失"
             }
         },
@@ -2179,7 +2179,7 @@
         "ped": {
             "meaning": "foot, child, education",
             "examples": {
-                "biped": "a. 双足动物的n. 双足动物",
+                "biped": "a. 双足动物的 n. 双足动物",
                 "expedition": "n. 远征，探险",
                 "pedology": "n. 儿科学",
                 "pedant": "n. 书呆子",
@@ -3513,10 +3513,14 @@
         "vi, via, vey, voy": {
             "meaning": "way",
             "examples": {
-                "via": "n. 道路prep. 经过",
+                "via": "n. 道路 prep. 经过",
                 "deviate": "v. 越轨",
-                "convey": "v. 运输",
-                "war": "=towatch",
+                "convey": "v. 运输"
+            }
+        },
+        "war": {
+            "meaning": "to watch",
+            "examples": {
                 "wary": "a. 警惕的，谨慎的",
                 "aware": "a. 意识到"
             }
