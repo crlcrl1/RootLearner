@@ -34,6 +34,8 @@ RootWidget::RootWidget(QWidget *parent, QWidget *rootWidget, int learnNumber)
     connect(ui->CChoiceButton, &QPushButton::clicked, this, &RootWidget::do_chose_answer);
     connect(ui->DChoiceButton, &QPushButton::clicked, this, &RootWidget::do_chose_answer);
     connect(ui->nextButton, &QPushButton::clicked, this, &RootWidget::do_nextButton_clicked);
+    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+    ui->procressLable->setText(proc);
     next();
 }
 
@@ -52,8 +54,7 @@ RootWidget::~RootWidget() {
 
 void RootWidget::next() {
     ui->nextButton->setEnabled(false);
-    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
-    ui->procressLable->setText(proc);
+    ui->skipButton->setEnabled(true);
     if (learnedNumber == numberToLearn) {
 	QMessageBox::information(this, "Congratulations", "You have learned all roots!");
 	this->close();
@@ -241,7 +242,11 @@ void RootWidget::do_chose_answer() {
     QObject *senderObj = sender();
     QString senderName = senderObj->objectName();
     if (senderName[0].unicode() - 'A' == answer) {
+	++learnedNumber;
+	QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+	ui->procressLable->setText(proc);
 	ui->nextButton->setEnabled(true);
+	ui->skipButton->setEnabled(false);
 	ui->label->setText(currentRoot->getRoot() + " = " + currentRootMeaning + rootExample);
 	QPushButton *pushedButton = qobject_cast<QPushButton *>(senderObj);
 	QPalette pal = pushedButton->palette();
@@ -272,6 +277,8 @@ void RootWidget::on_skipButton_clicked() {
     ui->CChoiceButton->setEnabled(true);
     ui->DChoiceButton->setEnabled(true);
     ++learnedNumber;
+    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+    ui->procressLable->setText(proc);
     next();
 }
 
@@ -285,6 +292,5 @@ void RootWidget::do_nextButton_clicked() {
     ui->BChoiceButton->setEnabled(true);
     ui->CChoiceButton->setEnabled(true);
     ui->DChoiceButton->setEnabled(true);
-    ++learnedNumber;
     next();
 }

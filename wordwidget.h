@@ -43,6 +43,9 @@ private:
     int answer;
     Status status;
 
+    void initChoice(int answer, QString ans, QString choice1, QString choice2, QString choice3);
+    int generateRandomNumber();
+
     void closeEvent(QCloseEvent *event);
     void readData();
     void nextRoot();

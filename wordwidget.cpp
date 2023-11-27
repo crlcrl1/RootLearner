@@ -33,7 +33,8 @@ WordWidget::WordWidget(QWidget *parent, QWidget *wordWidget, int learnNumber)
     connect(ui->CChoiceButton, &QPushButton::clicked, this, &WordWidget::do_chose_answer);
     connect(ui->DChoiceButton, &QPushButton::clicked, this, &WordWidget::do_chose_answer);
     connect(ui->nextButton, &QPushButton::clicked, this, &WordWidget::do_nextButton_clicked);
-
+    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+    ui->progerssLabel->setText(proc);
     nextRoot();
 }
 
@@ -48,6 +49,48 @@ WordWidget::~WordWidget() {
     }
     delete learnedWords;
     delete ui;
+}
+
+void WordWidget::initChoice(int answer, QString ans, QString choice1, QString choice2, QString choice3) {
+    QPalette pal = ui->skipButton->palette();
+    ui->AChoiceButton->setPalette(pal);
+    ui->BChoiceButton->setPalette(pal);
+    ui->CChoiceButton->setPalette(pal);
+    ui->DChoiceButton->setPalette(pal);
+    ui->AChoiceButton->setEnabled(true);
+    ui->BChoiceButton->setEnabled(true);
+    ui->CChoiceButton->setEnabled(true);
+    ui->DChoiceButton->setEnabled(true);
+    switch (answer) {
+    case 0:
+	ui->AChoiceButton->setText(ans);
+	ui->BChoiceButton->setText(choice1);
+	ui->CChoiceButton->setText(choice2);
+	ui->DChoiceButton->setText(choice3);
+	break;
+    case 1:
+	ui->AChoiceButton->setText(choice1);
+	ui->BChoiceButton->setText(ans);
+	ui->CChoiceButton->setText(choice2);
+	ui->DChoiceButton->setText(choice3);
+	break;
+    case 2:
+	ui->AChoiceButton->setText(choice1);
+	ui->BChoiceButton->setText(choice2);
+	ui->CChoiceButton->setText(ans);
+	ui->DChoiceButton->setText(choice3);
+	break;
+    case 3:
+	ui->AChoiceButton->setText(choice1);
+	ui->BChoiceButton->setText(choice2);
+	ui->CChoiceButton->setText(choice3);
+	ui->DChoiceButton->setText(ans);
+	break;
+    }
+}
+
+int WordWidget::generateRandomNumber() {
+    return QRandomGenerator::global()->bounded(allRootNumber);
 }
 
 void WordWidget::closeEvent(QCloseEvent *event) {
@@ -179,8 +222,9 @@ void WordWidget::readData() {
 
 void WordWidget::nextRoot() {
     status = ROOT;
-    ui->descriptionLabel->setText("Please chonse the root of the word");
+    ui->descriptionLabel->setText("Please choose the root of the word");
     ui->nextButton->hide();
+    ui->skipButton->setEnabled(true);
     QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
     ui->progerssLabel->setText(proc);
     if (learnedNumber == numberToLearn) {
@@ -205,156 +249,64 @@ void WordWidget::nextRoot() {
     ui->label->setText(currentWord->getWord());
     QString alter1, alter2, alter3;
     int tempAlter1, tempAlter2, tempAlter3;
-    while (allRoots[tempAlter1 = QRandomGenerator::global()->bounded(allRootNumber)]->getRoot() == root)
+    while (allRoots[tempAlter1 = generateRandomNumber()]->getRoot() == root)
 	continue;
-    while (allRoots[tempAlter2 = QRandomGenerator::global()->bounded(allRootNumber)]->getRoot() == root || tempAlter2 == tempAlter1)
+    while (allRoots[tempAlter2 = generateRandomNumber()]->getRoot() == root || tempAlter2 == tempAlter1)
 	continue;
-    while (allRoots[tempAlter3 = QRandomGenerator::global()->bounded(allRootNumber)]->getRoot() == root || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
+    while (allRoots[tempAlter3 = generateRandomNumber()]->getRoot() == root || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
 	continue;
     alter1 = allRoots[tempAlter1]->getRoot();
     alter2 = allRoots[tempAlter2]->getRoot();
     alter3 = allRoots[tempAlter3]->getRoot();
-    switch (answer) {
-    case 0:
-	ui->AChoiceButton->setText(root);
-	ui->BChoiceButton->setText(alter1);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 1:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(root);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 2:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(root);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 3:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(alter3);
-	ui->DChoiceButton->setText(root);
-	break;
-    }
+    initChoice(answer, root, alter1, alter2, alter3);
 }
 
 void WordWidget::nextRootMeaning() {
     status = ROOT_MEANING;
-    ui->descriptionLabel->setText("Please chonse the root's meaning");
+    ui->descriptionLabel->setText("Please choose the root's meaning");
     QString rootMeaning = currentWord->getRoot()->getMeaning();
     answer = QRandomGenerator::global()->bounded(4);
     QString alter1, alter2, alter3;
     int tempAlter1, tempAlter2, tempAlter3;
-    while (allRoots[tempAlter1 = QRandomGenerator::global()->bounded(allRootNumber)]->getMeaning() == rootMeaning)
+    while (allRoots[tempAlter1 = generateRandomNumber()]->getMeaning() == rootMeaning)
 	continue;
-    while (allRoots[tempAlter2 = QRandomGenerator::global()->bounded(allRootNumber)]->getMeaning() == rootMeaning || tempAlter2 == tempAlter1)
+    while (allRoots[tempAlter2 = generateRandomNumber()]->getMeaning() == rootMeaning || tempAlter2 == tempAlter1)
 	continue;
-    while (allRoots[tempAlter3 = QRandomGenerator::global()->bounded(allRootNumber)]->getMeaning() == rootMeaning || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
+    while (allRoots[tempAlter3 = generateRandomNumber()]->getMeaning() == rootMeaning || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
 	continue;
     alter1 = allRoots[tempAlter1]->getMeaning();
     alter2 = allRoots[tempAlter2]->getMeaning();
     alter3 = allRoots[tempAlter3]->getMeaning();
-    switch (answer) {
-    case 0:
-	ui->AChoiceButton->setText(rootMeaning);
-	ui->BChoiceButton->setText(alter1);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 1:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(rootMeaning);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 2:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(rootMeaning);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 3:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(alter3);
-	ui->DChoiceButton->setText(rootMeaning);
-	break;
-    }
+    initChoice(answer, rootMeaning, alter1, alter2, alter3);
 }
 
 void WordWidget::nextWordMeaning() {
     status = WORD_MEANING;
-    ui->descriptionLabel->setText("Please chonse the word's meaning");
+    ui->descriptionLabel->setText("Please choose the word's meaning");
     QString wordMeaning = currentWord->getMeaning();
     answer = QRandomGenerator::global()->bounded(4);
     QString alter1, alter2, alter3;
     int tempAlter1, tempAlter2, tempAlter3;
-    while (allWords[tempAlter1 = QRandomGenerator::global()->bounded(allWordNumber)]->getMeaning() == wordMeaning)
+    while (allWords[tempAlter1 = generateRandomNumber()]->getMeaning() == wordMeaning)
 	continue;
-    while (allWords[tempAlter2 = QRandomGenerator::global()->bounded(allWordNumber)]->getMeaning() == wordMeaning || tempAlter2 == tempAlter1)
+    while (allWords[tempAlter2 = generateRandomNumber()]->getMeaning() == wordMeaning || tempAlter2 == tempAlter1)
 	continue;
-    while (allWords[tempAlter3 = QRandomGenerator::global()->bounded(allWordNumber)]->getMeaning() == wordMeaning || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
+    while (allWords[tempAlter3 = generateRandomNumber()]->getMeaning() == wordMeaning || tempAlter3 == tempAlter1 || tempAlter3 == tempAlter2)
 	continue;
     alter1 = allWords[tempAlter1]->getMeaning();
     alter2 = allWords[tempAlter2]->getMeaning();
     alter3 = allWords[tempAlter3]->getMeaning();
-    switch (answer) {
-    case 0:
-	ui->AChoiceButton->setText(wordMeaning);
-	ui->BChoiceButton->setText(alter1);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 1:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(wordMeaning);
-	ui->CChoiceButton->setText(alter2);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 2:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(wordMeaning);
-	ui->DChoiceButton->setText(alter3);
-	break;
-    case 3:
-	ui->AChoiceButton->setText(alter1);
-	ui->BChoiceButton->setText(alter2);
-	ui->CChoiceButton->setText(alter3);
-	ui->DChoiceButton->setText(wordMeaning);
-	break;
-    }
+    initChoice(answer, wordMeaning, alter1, alter2, alter3);
 }
 
 void WordWidget::do_skipButton_clicked() {
-    QPalette pal = ui->skipButton->palette();
-    ui->AChoiceButton->setPalette(pal);
-    ui->BChoiceButton->setPalette(pal);
-    ui->CChoiceButton->setPalette(pal);
-    ui->DChoiceButton->setPalette(pal);
-    ui->AChoiceButton->setEnabled(true);
-    ui->BChoiceButton->setEnabled(true);
-    ui->CChoiceButton->setEnabled(true);
-    ui->DChoiceButton->setEnabled(true);
     ++learnedNumber;
+    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+    ui->progerssLabel->setText(proc);
     nextRoot();
 }
 
 void WordWidget::do_nextButton_clicked() {
-    QPalette pal = ui->skipButton->palette();
-    ui->AChoiceButton->setPalette(pal);
-    ui->BChoiceButton->setPalette(pal);
-    ui->CChoiceButton->setPalette(pal);
-    ui->DChoiceButton->setPalette(pal);
-    ui->AChoiceButton->setEnabled(true);
-    ui->BChoiceButton->setEnabled(true);
-    ui->CChoiceButton->setEnabled(true);
-    ui->DChoiceButton->setEnabled(true);
-    ++learnedNumber;
     nextRoot();
 }
 
@@ -367,11 +319,6 @@ void WordWidget::do_chose_answer() {
 	    QString display = ui->label->text();
 	    display += "\nRoot: " + currentWord->getRoot()->getRoot();
 	    ui->label->setText(display);
-	    QPalette pal = ui->skipButton->palette();
-	    ui->AChoiceButton->setPalette(pal);
-	    ui->BChoiceButton->setPalette(pal);
-	    ui->CChoiceButton->setPalette(pal);
-	    ui->DChoiceButton->setPalette(pal);
 	    nextRootMeaning();
 	} else {
 	    QPushButton *pushedButton = qobject_cast<QPushButton *>(senderObj);
@@ -388,11 +335,6 @@ void WordWidget::do_chose_answer() {
 	    QString display = ui->label->text();
 	    display += "\nRoot's meaning: " + currentWord->getRoot()->getMeaning();
 	    ui->label->setText(display);
-	    QPalette pal = ui->skipButton->palette();
-	    ui->AChoiceButton->setPalette(pal);
-	    ui->BChoiceButton->setPalette(pal);
-	    ui->CChoiceButton->setPalette(pal);
-	    ui->DChoiceButton->setPalette(pal);
 	    nextWordMeaning();
 	} else {
 	    QPushButton *pushedButton = qobject_cast<QPushButton *>(senderObj);
@@ -419,6 +361,10 @@ void WordWidget::do_chose_answer() {
 	    ui->CChoiceButton->setEnabled(false);
 	    ui->DChoiceButton->setEnabled(false);
 	    ui->nextButton->show();
+	    ui->skipButton->setEnabled(false);
+	    ++learnedNumber;
+	    QString proc = QString::number(learnedNumber) + "/" + QString::number(numberToLearn);
+	    ui->progerssLabel->setText(proc);
 	} else {
 	    QPushButton *pushedButton = qobject_cast<QPushButton *>(senderObj);
 	    QPalette pal = pushedButton->palette();
